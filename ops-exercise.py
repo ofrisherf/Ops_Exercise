@@ -11,7 +11,7 @@ with open(filename, "wb") as f:
 
 # Untar the images archive to /public/images
 tar = tarfile.open("pandapics.tar.gz","r:gz")
-tar.extractall("/public/images")
+tar.extractall("./public/images")
 tar.close()
 
 # Render the docker-compose.yml template
