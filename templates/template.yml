@@ -1,0 +1,19 @@
+version: "2"
+services:
+  app:
+    container_name: app
+    restart: always
+    build: .
+    ports:
+      - "3000:3000"
+    extra_hosts:
+      - "db:{{ ip }}"
+    environment:
+      - MONGO_URI=mongodb://{{ ip }}:27017
+    links:
+      - mongo
+  mongo:
+    container_name: mongo
+    build: ./db
+    ports:
+      - "27017:27017"
