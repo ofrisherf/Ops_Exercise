@@ -19,11 +19,17 @@ health_url = 'http://localhost:3000/health'
 import requests,tarfile,urllib2,time,traceback
 from subprocess import call
 
+################
+# SCRIPT BEGIN #
+################
+
 # Download the images file
 try:
     filename = bucket.split("/")[-1]
     with open(filename, "wb") as f:
         r = requests.get(bucket)
+        if r.status_code == 404:
+           raise FileNotFoundError
         f.write(r.content)
 except Exception:
     print_exception("Error getting the images file.")
@@ -44,7 +50,6 @@ try:
 except:
     print_exception("Error: docker-compose up command failed.")
     fail_deploy()
-
 
 # Give the app a few seconds to start
 print "Starting up the app..."
