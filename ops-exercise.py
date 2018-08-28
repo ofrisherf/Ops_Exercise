@@ -2,26 +2,52 @@
 
 # Functions
 def fail_deploy():
-    print "Failing deployment....."
+    rootLogger.debug("Failing deployment...")
     call(["/usr/local/bin/docker-compose","down"])
 
 def print_exception(error):
-    print error 
+    rootLogger.debug(error)
     traceback.print_exc()
 
 # Params
 bucket = "https://s3.eu-central-1.amazonaws.com/devops-exercise/pandapics.tar.gz"
 pics_tar = "pandapics.tar.gz"
-images_dir = '/home/ec2-user/repo/Ops_Exercise/public/images/'
+images_dir = 'public/images/'
 health_url = 'http://localhost:3000/health'
+logpath = "/var/log"
+logname = "ops-exercise"
 
 # Imports
-import requests,tarfile,urllib2,time,traceback
+import requests,tarfile,urllib2,time,traceback,os,shutil,logging
 from subprocess import call
 
 ################
 # SCRIPT BEGIN #
 ################
+
+# Set logging
+logFormatter = logging.Formatter("%(asctime)s [%(threadName)-12.12s] [%(levelname)-5.5s]  %(message)s")
+rootLogger = logging.getLogger()
+
+level = logging.getLevelName('DEBUG')
+rootLogger.setLevel(level)
+
+fileHandler = logging.FileHandler("{0}/{1}.log".format(logpath, logname))
+fileHandler.setFormatter(logFormatter)
+rootLogger.addHandler(fileHandler)
+
+consoleHandler = logging.StreamHandler()
+consoleHandler.setFormatter(logFormatter)
+rootLogger.addHandler(consoleHandler)
+
+
+rootLogger.debug("Bla")
+
+
+# Make sure images directory exists and is empty
+if os.path.exists(images_dir):
+   shutil.rmtree(images_dir)
+os.makedirs(images_dir)    
 
 # Download the images file
 try:
