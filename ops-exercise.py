@@ -1,5 +1,15 @@
+# Ops Exercise
+
+# Functions
+def fail_deploy():
+    print "Failing deployment....."
+    call(["/usr/local/bin/docker-compose","down"])
+
 import requests,tarfile,urllib2,time,traceback
 from subprocess import call
+
+# Params
+url='http://localhost:3000/health'
 
 # Download the images file
 url = "https://s3.eu-central-1.amazonaws.com/devops-exercise/pandapics.tar.gz"
@@ -16,8 +26,6 @@ tar.close()
 # Run docker-compose up
 call(["/usr/local/bin/docker-compose","up","-d"])
 
-url='http://localhost:3000/health'
-
 # Give the app a few seconds to start
 print "Starting up the app..."
 time.sleep(5)
@@ -31,6 +39,5 @@ try:
 except Exception:
     print "Exception caught:"
     traceback.print_exc()
-    print "Failing deployment....."
-    call(["/usr/local/bin/docker-compose","down"])
+    fail_deploy()
 
