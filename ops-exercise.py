@@ -1,5 +1,4 @@
 import requests,tarfile,urllib2,time,traceback
-from jinja2 import Environment, PackageLoader,FileSystemLoader, select_autoescape
 from subprocess import call
 
 # Download the images file
