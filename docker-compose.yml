@@ -6,14 +6,14 @@ services:
     build: .
     ports:
       - "3000:3000"
-    extra_hosts:
-      - "db:18.222.237.220"
+    #extra_hosts:
+    #  - "db:localhost"
     environment:
-      - MONGO_URI=mongodb://18.222.237.220:27017
+      - MONGO_URI=mongodb://db:27017
     links:
-      - mongo
-  mongo:
-    container_name: mongo
+      - db
+  db:
+    container_name: db
     build: ./db
     ports:
       - "27017:27017"
