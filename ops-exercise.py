@@ -1,5 +1,9 @@
 # Ops Exercise
 
+# Imports
+import requests,tarfile,urllib2,time,traceback,os,shutil,logging,sys
+from subprocess import call
+
 # Functions
 # Fail deploy if something bad happened
 def fail_deploy(logger):
@@ -43,15 +47,14 @@ def main():
     
     # Download the images file
     try:
-        filename = bucket.split("/")[-1]
-        with open(filename, "wb") as f:
-            r = requests.get(bucket)
+        with open(pics_tar, "wb") as f:
+            r = requests.get(bucket+ pics_tar)
             if r.status_code == 404:
                raise FileNotFoundError
             f.write(r.content)
     except Exception:
         print_exception("Error getting the images file.",rootLogger)
-        fail_deploy(rootLogger)
+        return fail_deploy(rootLogger)
     
     # Untar the images archive to public/images
     try:
@@ -60,14 +63,14 @@ def main():
         tar.close()
     except Exception:
         print_exception("Error extracting the images to public/images",rootLogger)
-        fail_deploy(rootLogger)
+        return fail_deploy(rootLogger)
     
     # Run docker-compose up
     try:
         call(["/usr/local/bin/docker-compose","up","-d"])
-    except:
+    except Exception:
         print_exception("Error: docker-compose up command failed.",rootLogger)
-        fail_deploy(rootLogger)
+        return fail_deploy(rootLogger)
 
     # Give the app a few seconds to start
     print "Starting up the app..."
@@ -81,21 +84,17 @@ def main():
            raise ValueError("Health check returned: " + str(health))
     except Exception:
            print_exception("Health check failed.",rootLogger)
-           fail_deploy(rootLogger)
+           return fail_deploy(rootLogger)
     
     return 0
 
 # Params
-bucket = "https://s3.eu-central-1.amazonaws.com/devops-exercise/pandapics.tar.gz"
+bucket = "https://s3.eu-central-1.amazonaws.com/devops-exercise/"
 pics_tar = "pandapics.tar.gz"
 images_dir = 'public/images/'
 health_url = 'http://localhost:3000/health'
 logpath = "/var/log"
 logname = "ops-exercise"
-
-# Imports
-import requests,tarfile,urllib2,time,traceback,os,shutil,logging,sys
-from subprocess import call
 
 ################
 # SCRIPT BEGIN #
