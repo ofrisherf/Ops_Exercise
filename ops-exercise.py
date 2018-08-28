@@ -40,10 +40,6 @@ consoleHandler = logging.StreamHandler()
 consoleHandler.setFormatter(logFormatter)
 rootLogger.addHandler(consoleHandler)
 
-
-rootLogger.debug("Bla")
-
-
 # Make sure images directory exists and is empty
 if os.path.exists(images_dir):
    shutil.rmtree(images_dir)
