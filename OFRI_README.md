@@ -4,7 +4,7 @@
 
 ------------------------------------------
 
-> NOTE: I am fetching AWS Instance Metadata in the script in order to get the host's IP. If you are not using AWS, you will need to change **line 22** in the script.
+> NOTE: please make sure the log directory exists, or change it.
 -------------------------------------------
 
 ##### What I did
@@ -18,11 +18,8 @@
 ------------------------------------------------------
 ##### The Repo Contents
 In addition to what was in the original repo I cloned, I added several files and directories:
-1. `templates` directory
-2. `templates/template.yml`: docker-compose template to be used
-3. `public/images` directory
-4. `ops-exercise.py`: the script to run
-5. `docker-compose.yml`: was created by the script from the template
+1. `ops-exercise.py`: the script to run
+2. `docker-compose.yml`
 
 -------------------------
 ##### How to run the script
